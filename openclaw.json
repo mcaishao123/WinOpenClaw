@@ -1,30 +1,75 @@
 {
   "meta": {
     "lastTouchedVersion": "2026.3.1",
-    "lastTouchedAt": "2026-03-03T14:45:29.189Z"
+    "lastTouchedAt": "2026-03-03T16:38:33.146Z"
   },
   "env": {
     "AICLIENT2API_KEY": "123456",
-    "ZHIPU_API_KEY":"52597a5a2fb74ea49c5af1fcca8e37cd.10N2R82019gS5h98"
+    "ZHIPU_API_KEY": "52597a5a2fb74ea49c5af1fcca8e37cd.10N2R82019gS5h98"
   },
   "auth": {
-    "profiles": {}
+    "profiles": {
+      "qwen-portal:default": {
+        "provider": "qwen-portal",
+        "mode": "oauth"
+      }
+    }
   },
   "models": {
     "mode": "merge",
     "providers": {
-       "zhipu-ai": {
-      "baseUrl": "https://open.bigmodel.cn/api/paas/v4/",
-      "apiKey": "${ZHIPU_API_KEY}",
-      "api": "openai-completions",
-      "models": [
-        {
-          "id": "glm-4.7-flash",
-          "name": "GLM-4.7 Flash",
-          "contextWindow": 128000,
-           "maxTokens": 8192
-        }
-      ]
+      "qwen-portal": {
+        "baseUrl": "https://portal.qwen.ai/v1",
+        "apiKey": "qwen-oauth",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "coder-model",
+            "name": "Qwen Coder",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "vision-model",
+            "name": "Qwen Vision",
+            "reasoning": false,
+            "input": [
+              "text",
+              "image"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          }
+        ]
+      },
+      "zhipu-ai": {
+        "baseUrl": "https://open.bigmodel.cn/api/paas/v4/",
+        "apiKey": "${ZHIPU_API_KEY}",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "glm-4.7-flash",
+            "name": "GLM-4.7 Flash",
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          }
+        ]
       },
       "aiclient2api-gemini": {
         "baseUrl": "http://localhost:3000/v1",
@@ -80,11 +125,12 @@
   "agents": {
     "defaults": {
       "model": {
-        "primary": "zhipu-ai/glm-4-7-flash",
+        "primary": "qwen-portal/coder-model",
         fallbacks: [
           "aiclient2api-kiro/claude-3-5-sonnet-latest",
           "antigravity/antigravity-model-id",
-          "aiclient2api-gemini/gemini-3-flash-preview"
+          "aiclient2api-gemini/gemini-3-flash-preview",
+          "zhipu-ai/glm-4-7-flash"
         ]
       },
       "models": {
@@ -99,7 +145,11 @@
         },
         "antigravity/antigravity-model-id": {
           "alias": "Antigravity"
-        }
+        },
+        "qwen-portal/coder-model": {
+          "alias": "qwen"
+        },
+        "qwen-portal/vision-model": {}
       },
       "workspace": "C:\\Users\\Administrator\\.openclaw\\workspace",
       "compaction": {
@@ -116,6 +166,9 @@
     "nativeSkills": "auto",
     "restart": true,
     "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
   },
   "channels": {
     "feishu": {
@@ -137,11 +190,18 @@
     "auth": {
       "mode": "token",
       "token": "636e1eaf0bb7faea0809776e78776a686bca427031e48ce5"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
     }
   },
   "plugins": {
     "entries": {
       "feishu": {
+        "enabled": true
+      },
+      "qwen-portal-auth": {
         "enabled": true
       }
     }
