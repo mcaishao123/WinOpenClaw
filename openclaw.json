@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.3.1",
+    "lastTouchedAt": "2026-03-03T14:45:29.189Z"
+  },
+  "env": {
+    "AICLIENT2API_KEY": "123456",
+    "ZHIPU_API_KEY":"52597a5a2fb74ea49c5af1fcca8e37cd.10N2R82019gS5h98"
+  },
+  "auth": {
+    "profiles": {}
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+       "zhipu-ai": {
+      "baseUrl": "https://open.bigmodel.cn/api/paas/v4/",
+      "apiKey": "${ZHIPU_API_KEY}",
+      "api": "openai-completions",
+      "models": [
+        {
+          "id": "glm-4.7-flash",
+          "name": "GLM-4.7 Flash",
+          "contextWindow": 128000,
+           "maxTokens": 8192
+        }
+      ]
+      },
+      "aiclient2api-gemini": {
+        "baseUrl": "http://localhost:3000/v1",
+        "apiKey": "${AICLIENT2API_KEY}",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "gemini-3-flash-preview",
+            "name": "Gemini 3 Flash Preview",
+            "reasoning": false,
+            "input": [
+              "text",
+              "image"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 1000000,
+            "maxTokens": 8192
+          }
+        ]
+      },
+      "aiclient2api-kiro": {
+        "baseUrl": "http://localhost:3000/v1",
+        "apiKey": "${AICLIENT2API_KEY}",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "claude-3-5-sonnet-latest",
+            "name": "Claude 3.5 Sonnet (Kiro)",
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
+      },
+      "antigravity": {
+        "baseUrl": "http://localhost:3000/v1",
+        "apiKey": "${AICLIENT2API_KEY}",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "antigravity-model-id",
+            "name": "Antigravity Model",
+            "contextWindow": 128000
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "zhipu-ai/glm-4-7-flash",
+        fallbacks: [
+          "aiclient2api-kiro/claude-3-5-sonnet-latest",
+          "antigravity/antigravity-model-id",
+          "aiclient2api-gemini/gemini-3-flash-preview"
+        ]
+      },
+      "models": {
+        "zhipu-ai/glm-4.7-flash": {
+          "alias": "GLM-4.7 Flash"
+        },
+        "aiclient2api-gemini/gemini-3-flash-preview": {
+          "alias": "Gemini 3 Flash"
+        },
+        "aiclient2api-kiro/claude-3-5-sonnet-latest": {
+          "alias": "Kiro Claude"
+        },
+        "antigravity/antigravity-model-id": {
+          "alias": "Antigravity"
+        }
+      },
+      "workspace": "C:\\Users\\Administrator\\.openclaw\\workspace",
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    }
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "dmPolicy": "pairing",
+      "accounts": {
+        "main": {
+          "appId": "cli_a92cf4fa57bbdcd1",
+          "appSecret": "iFNBvRaUQec43j8eTw33pgMpYT70M4c0",
+          "botName": "小虾助理-win"
+        }
+      }
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "636e1eaf0bb7faea0809776e78776a686bca427031e48ce5"
+    }
+  },
+  "plugins": {
+    "entries": {
+      "feishu": {
+        "enabled": true
+      }
+    }
+  }
+}
